@@ -34,13 +34,11 @@ pipeline {
 
         stage('Deploy') {
             steps {
-
-                // Start Flask application in background
                 bat '''
-                start "FlaskApp" /B "%PYTHON%" app.py
+                set JENKINS_NODE_COOKIE=dontKillMe
+                start "FlaskApp" /B "%PYTHON%" "%WORKSPACE%\\app.py"
                 '''
 
-                // Wait and check application using Python
                 bat '''
                 "%PYTHON%" -c "import urllib.request, time; time.sleep(5); r=urllib.request.urlopen('http://127.0.0.1:5000'); print('Application deployed successfully. HTTP status:', r.status)"
                 '''
