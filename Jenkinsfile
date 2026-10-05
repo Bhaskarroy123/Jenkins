@@ -15,19 +15,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo 'No external dependencies required.'
+                bat '"%PYTHON%" -m pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '"%PYTHON%" -c "print(\'Python test passed successfully!\')"'
+                bat '"%PYTHON%" -m pytest tests'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Build completed successfully!'
+                bat '"%PYTHON%" -m py_compile app.py'
+                echo 'Student Feedback Application built successfully!'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Student Feedback Application deployed successfully!'
             }
         }
     }
@@ -38,11 +45,11 @@ pipeline {
         }
 
         success {
-            echo 'Pipeline successful!'
+            echo 'CI/CD Pipeline completed successfully!'
         }
 
         failure {
-            echo 'Pipeline failed!'
+            echo 'CI/CD Pipeline failed!'
         }
     }
 }
