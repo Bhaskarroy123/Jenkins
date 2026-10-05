@@ -34,22 +34,22 @@ pipeline {
 
         stage('Deploy') {
             steps {
+
+                // Start Flask application in background
                 bat '''
                 start "FlaskApp" /B "%PYTHON%" app.py
                 '''
 
+                // Wait and check application using Python
                 bat '''
-                ping 127.0.0.1 -n 6 > nul
-                '''
-
-                bat '''
-                curl http://localhost:5000
+                "%PYTHON%" -c "import urllib.request, time; time.sleep(5); r=urllib.request.urlopen('http://127.0.0.1:5000'); print('Application deployed successfully. HTTP status:', r.status)"
                 '''
             }
         }
     }
 
     post {
+
         always {
             echo 'Pipeline finished.'
         }
