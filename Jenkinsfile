@@ -38,9 +38,13 @@ pipeline {
                 start "FlaskApp" /B "%PYTHON%" app.py
                 '''
 
-                bat 'timeout /t 5 /nobreak'
+                bat '''
+                ping 127.0.0.1 -n 6 > nul
+                '''
 
-                bat 'curl http://localhost:5000'
+                bat '''
+                curl http://localhost:5000
+                '''
             }
         }
     }
