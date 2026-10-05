@@ -1,55 +1,50 @@
 pipeline {
     agent any
 
+    environment {
+        PYTHON = 'C:\\Users\\bhask\\AppData\\Local\\Programs\\Python\\Python312\\python.exe'
+    }
+
     stages {
 
         stage('Python Version') {
             steps {
-                bat 'python --version'
+                bat '"%PYTHON%" --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat '''
-                    python -m pip install --upgrade pip
-                    if exist requirements.txt (
-                        python -m pip install -r requirements.txt
-                    )
-                '''
+                bat '"%PYTHON%" -m pip install --upgrade pip'
+                
+                bat '"%PYTHON%" -m pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                bat '''
-                    if exist tests (
-                        python -m pytest tests
-                    ) else (
-                        echo No tests directory found
-                    )
-                '''
+                bat '"%PYTHON%" -m pytest'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Build completed successfully'
+                echo 'Build completed successfully!'
             }
         }
     }
 
     post {
+        always {
+            echo 'Pipeline finished.'
+        }
+
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Pipeline successful!'
         }
 
         failure {
             echo 'Pipeline failed!'
-        }
-
-        always {
-            echo 'Pipeline finished.'
         }
     }
 }
