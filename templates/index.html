@@ -1,28 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Feedback</title>
+    <title>Student Feedback System</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #f4f6f8;
+            margin: 0;
             padding: 40px;
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
             background: white;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
+            color: #333;
         }
 
         label {
@@ -31,32 +35,59 @@
             font-weight: bold;
         }
 
-        input, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
             padding: 10px;
-            margin-top: 5px;
+            margin-top: 6px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
         }
 
         textarea {
-            height: 100px;
+            height: 120px;
+            resize: vertical;
         }
 
         button {
             width: 100%;
-            padding: 12px;
             margin-top: 20px;
+            padding: 12px;
             background: #007bff;
             color: white;
             border: none;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
         }
 
         .feedback {
-            margin-top: 20px;
+            margin-top: 30px;
             padding: 15px;
-            background: #f1f1f1;
-            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -67,36 +98,121 @@
 
     <h1>Student Feedback Form</h1>
 
+    {% if message %}
+        <div class="success">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% endif %}
+
     <form method="POST">
 
-        <label>Student Name</label>
-        <input type="text" name="name" required>
+        <label for="name">Student Name</label>
 
-        <label>Course</label>
-        <input type="text" name="course" required>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+        >
 
-        <label>Feedback</label>
-        <textarea name="feedback" required></textarea>
 
-        <button type="submit">Submit Feedback</button>
+        <label for="email">NIET Email ID</label>
+
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="example@niet.co.in"
+            pattern="[a-zA-Z0-9._%+-]+@niet\.co\.in"
+            title="Please enter your NIET email ID ending with @niet.co.in"
+            required
+        >
+
+
+        <label for="erp">ERP ID</label>
+
+        <input
+            type="text"
+            id="erp"
+            name="erp"
+            placeholder="Enter your ERP ID"
+            required
+        >
+
+
+        <label for="course">Course</label>
+
+        <input
+            type="text"
+            id="course"
+            name="course"
+            placeholder="e.g. B.Tech Data Science"
+            required
+        >
+
+
+        <label for="feedback">Feedback</label>
+
+        <textarea
+            id="feedback"
+            name="feedback"
+            placeholder="Enter your feedback"
+            required
+        ></textarea>
+
+
+        <button type="submit">
+            Submit Feedback
+        </button>
 
     </form>
 
-    <h2>Submitted Feedback</h2>
 
-    {% for item in feedbacks %}
+    {% if feedbacks %}
 
-    <div class="feedback">
-        <strong>Name:</strong> {{ item.name }} <br><br>
-        <strong>Course:</strong> {{ item.course }} <br><br>
-        <strong>Feedback:</strong> {{ item.feedback }}
-    </div>
+        <h2>Submitted Feedback</h2>
 
-    {% else %}
+        {% for item in feedbacks %}
 
-    <p>No feedback submitted yet.</p>
+            <div class="feedback">
 
-    {% endfor %}
+                <p>
+                    <strong>Name:</strong>
+                    {{ item.name }}
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    {{ item.email }}
+                </p>
+
+                <p>
+                    <strong>ERP:</strong>
+                    {{ item.erp }}
+                </p>
+
+                <p>
+                    <strong>Course:</strong>
+                    {{ item.course }}
+                </p>
+
+                <p>
+                    <strong>Feedback:</strong>
+                    {{ item.feedback }}
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
 
 </div>
 
